@@ -1,0 +1,79 @@
+[gd_scene load_steps=10 format=3 uid="uid://nyusr7xg2n1o"]
+
+[ext_resource type="Script" path="res://player.gd" id="1_mp02q"]
+[ext_resource type="Texture2D" uid="uid://dfil407xjmrbd" path="res://Tanks Theme/PNG/Retina/tankBody_huge_outline.png" id="2_8n18k"]
+[ext_resource type="PackedScene" uid="uid://bk5viob1yxm2r" path="res://laser.tscn" id="2_a6exh"]
+[ext_resource type="Texture2D" uid="uid://b7x1wseh5yc21" path="res://Tanks Theme/PNG/Retina/specialBarrel5_outline.png" id="3_q4120"]
+[ext_resource type="Texture2D" uid="uid://bym162a0qg8bw" path="res://Tanks Theme/PNG/Retina/specialBarrel2_outline.png" id="5_6jj7h"]
+[ext_resource type="Texture2D" uid="uid://b3fb3qewnxcdj" path="res://Tanks Theme/PNG/Retina/explosionSmoke3.png" id="5_ysbwu"]
+[ext_resource type="Texture2D" uid="uid://ccjbou21yhud8" path="res://Tanks Theme/PNG/Retina/explosionSmoke2.png" id="6_pqic0"]
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_n3wqd"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("5_ysbwu")
+}, {
+"duration": 1.0,
+"texture": ExtResource("6_pqic0")
+}],
+"loop": false,
+"name": &"fire",
+"speed": 10.0
+}, {
+"frames": [],
+"loop": true,
+"name": &"load",
+"speed": 6.0
+}]
+
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_bxdp6"]
+radius = 49.5
+height = 117.0
+
+[node name="player" type="CharacterBody2D" groups=["player"]]
+scale = Vector2(0.7, 0.7)
+script = ExtResource("1_mp02q")
+laser = ExtResource("2_a6exh")
+
+[node name="Camera2D" type="Camera2D" parent="."]
+scale = Vector2(0.7, 0.7)
+
+[node name="CoolDown" type="Timer" parent="."]
+wait_time = 0.5
+one_shot = true
+autostart = true
+
+[node name="TankBodyHugeOutline" type="Sprite2D" parent="."]
+rotation = -1.5708
+scale = Vector2(0.7, 0.7)
+texture = ExtResource("2_8n18k")
+
+[node name="SpecialBarrel5Outline" type="Sprite2D" parent="."]
+position = Vector2(-11.4286, 0)
+rotation = -1.5708
+scale = Vector2(0.7, 0.7)
+texture = ExtResource("3_q4120")
+
+[node name="SpecialBarrel2Outline" type="Sprite2D" parent="."]
+position = Vector2(44.2857, 0)
+texture = ExtResource("5_6jj7h")
+
+[node name="muzzle" type="Marker2D" parent="SpecialBarrel2Outline"]
+scale = Vector2(0.7, 0.7)
+
+[node name="shotsfired" type="AnimatedSprite2D" parent="SpecialBarrel2Outline"]
+position = Vector2(34.2857, 0.382362)
+scale = Vector2(0.0866529, 0.26604)
+sprite_frames = SubResource("SpriteFrames_n3wqd")
+animation = &"fire"
+autoplay = "fire"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(1.42853, -7.62939e-06)
+rotation = 1.5708
+scale = Vector2(0.7, 0.7)
+shape = SubResource("CapsuleShape2D_bxdp6")
+
+[connection signal="timeout" from="CoolDown" to="." method="_on_cool_down_timeout"]
+[connection signal="animation_finished" from="SpecialBarrel2Outline/shotsfired" to="." method="_on_fire_animation_finished"]

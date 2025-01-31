@@ -1,0 +1,67 @@
+[gd_scene load_steps=8 format=3 uid="uid://cl14l3u4n2og0"]
+
+[ext_resource type="Texture2D" uid="uid://cyxgj3i0sofx0" path="res://Tanks Theme/PNG/Default size/tankGreen_barrel3_outline.png" id="1_smq8h"]
+[ext_resource type="Script" path="res://enemy_tank.gd" id="1_ut8q7"]
+[ext_resource type="PackedScene" uid="uid://bxhcvan12ufk5" path="res://enemy_laser.tscn" id="2_pscs0"]
+[ext_resource type="Texture2D" uid="uid://dx2ahg7s6ecls" path="res://Tanks Theme/PNG/Retina/explosion2.png" id="2_ybyt2"]
+[ext_resource type="Texture2D" uid="uid://bfc6vlix5uw30" path="res://Tanks Theme/PNG/Retina/explosionSmoke4.png" id="3_0sqkl"]
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_gfe5g"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("2_ybyt2")
+}, {
+"duration": 1.0,
+"texture": ExtResource("3_0sqkl")
+}],
+"loop": false,
+"name": &"Fire",
+"speed": 12.0
+}]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_ib007"]
+size = Vector2(32, 14)
+
+[node name="Enemy_Cannon" type="Area2D"]
+script = ExtResource("1_ut8q7")
+CbObj = ExtResource("2_pscs0")
+
+[node name="Cannon" type="Sprite2D" parent="."]
+rotation = -1.5708
+texture = ExtResource("1_smq8h")
+
+[node name="Muzzle" type="Marker2D" parent="Cannon"]
+
+[node name="Fire" type="AnimatedSprite2D" parent="Cannon/Muzzle"]
+position = Vector2(0.192642, 21.7412)
+scale = Vector2(0.20378, 0.080402)
+sprite_frames = SubResource("SpriteFrames_gfe5g")
+animation = &"Fire"
+frame = 1
+frame_progress = 1.0
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(0, -1)
+shape = SubResource("RectangleShape2D_ib007")
+
+[node name="CoolDown" type="Timer" parent="."]
+wait_time = 0.719
+one_shot = true
+autostart = true
+
+[node name="DetectRadius" type="Area2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="DetectRadius"]
+
+[node name="InSight" type="Area2D" parent="."]
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="InSight"]
+polygon = PackedVector2Array(16, -8, 16, 8, 384, 64, 448, 0, 384, -64)
+
+[connection signal="animation_finished" from="Cannon/Muzzle/Fire" to="." method="_on_fire_animation_finished"]
+[connection signal="timeout" from="CoolDown" to="." method="_on_cool_down_timeout"]
+[connection signal="body_entered" from="DetectRadius" to="." method="_on_DetectRadius_body_entered"]
+[connection signal="body_exited" from="DetectRadius" to="." method="_on_DetectRadius_body_exited"]
+[connection signal="body_entered" from="InSight" to="." method="_on_InSight_body_entered"]
+[connection signal="body_exited" from="InSight" to="." method="_on_InSight_body_exited"]

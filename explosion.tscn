@@ -1,0 +1,34 @@
+[gd_scene load_steps=6 format=3 uid="uid://iqx6vip1i7vu"]
+
+[ext_resource type="Script" path="res://explosion.gd" id="1_lt0q5"]
+[ext_resource type="Texture2D" uid="uid://ci8ujni0ph3ts" path="res://Tanks Theme/PNG/Retina/explosion3.png" id="2_b7wa3"]
+[ext_resource type="Texture2D" uid="uid://dx2ahg7s6ecls" path="res://Tanks Theme/PNG/Retina/explosion2.png" id="3_p7rag"]
+[ext_resource type="Texture2D" uid="uid://d0a21jj8meqpp" path="res://Tanks Theme/PNG/Retina/explosion4.png" id="4_qbguj"]
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_owhcu"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("2_b7wa3")
+}, {
+"duration": 1.0,
+"texture": ExtResource("3_p7rag")
+}, {
+"duration": 1.0,
+"texture": ExtResource("4_qbguj")
+}],
+"loop": false,
+"name": &"default",
+"speed": 8.0
+}]
+
+[node name="Explosion" type="Node2D"]
+script = ExtResource("1_lt0q5")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+scale = Vector2(0.5, 0.5)
+sprite_frames = SubResource("SpriteFrames_owhcu")
+autoplay = "default"
+frame_progress = 0.678626
+
+[connection signal="animation_finished" from="AnimatedSprite2D" to="." method="_on_animated_sprite_2d_animation_finished"]

@@ -1,0 +1,25 @@
+[gd_scene load_steps=5 format=3 uid="uid://bxhcvan12ufk5"]
+
+[ext_resource type="Script" path="res://enemy_laser.gd" id="1_ecoqa"]
+[ext_resource type="PackedScene" uid="uid://iqx6vip1i7vu" path="res://explosion.tscn" id="2_7d2kt"]
+[ext_resource type="Texture2D" uid="uid://b808do40ql6xl" path="res://Tanks Theme/PNG/Default size/bulletRed1_outline.png" id="2_fecih"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_kjsm1"]
+size = Vector2(8, 14)
+
+[node name="enemy_laser" type="Area2D"]
+script = ExtResource("1_ecoqa")
+ExplosionObj = ExtResource("2_7d2kt")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+rotation = 3.14159
+texture = ExtResource("2_fecih")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("RectangleShape2D_kjsm1")
+
+[node name="VisibleOnScreenNotifier2D" type="VisibleOnScreenNotifier2D" parent="."]
+rotation = 1.5708
+
+[connection signal="body_entered" from="." to="." method="_on_body_entered"]
+[connection signal="screen_exited" from="VisibleOnScreenNotifier2D" to="." method="_on_visible_on_screen_notifier_2d_screen_exited"]
